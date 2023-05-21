@@ -26,6 +26,8 @@ type EquationEditorProps = {
   autoCommands: string;
   autoOperatorNames: string;
   onEnter?(): void;
+  addElementFromButton: string;
+  clearAddElementField: () => void;
 };
 
 /**
@@ -88,6 +90,14 @@ class EquationEditor extends Component<EquationEditorProps> {
 
     this.mathField = mathQuill.MathField(this.element.current, config);
     this.mathField.latex(value || "");
+  }
+
+  componentDidUpdate(prevProps: EquationEditorProps) {
+    if (prevProps.addElementFromButton !== this.props.addElementFromButton && this.props.addElementFromButton !== "") {
+      this.mathField.cmd(this.props.addElementFromButton)
+      this.props.clearAddElementField && this.props.clearAddElementField()
+      this.mathField.focus();
+    }
   }
 
   render() {
